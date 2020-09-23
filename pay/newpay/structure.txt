@@ -1,0 +1,163 @@
+*************************************************************************
+* THIS PAYROLL PROGRAM IS CREATED IN ORACLE 8.1.5.0.0               	*
+* PAYROLL IS BASED ON COMPLETE INDIAN STYLE i.e.                	*
+* DEDUCTION OF ESI,PF etc.WITH ESI ROUND OF FACILITY.                	*
+* 									*
+* TO RUN THIS PAYROLL PROGRAM YOU SHOULD HAVE TO ENSURE THAT YOU HAVE	*
+* INSTALLED ORACLE 8.1.5 IN YOUR SYSTEM.  IF YOU HAVE INSTALLED A LOWER *
+* VERSION OF ORACLE THEN THIS PROGRAM MAY NOT BE ABLE TO RUN            *
+*									*
+* FOLLOW THE INSTRUCTION GIVEN BELOW                                    *
+*************************************************************************
+
+***************************************************************************
+* FIRST YOU NEED TO CREATE USER IN ORACLE CHALLAN WITH PASSWORD CHALLAN   *
+***************************************************************************
+
+SQL > CREATE USER CHALLAN IDENTIFIED BY CHALLAN DEFAULT TABLESPACE SYSTEM;
+
+SQL > GRANT DBA TO CHALLAN;
+
+SQL > CONNECT CHALLAN/CHALLAN ;
+
+
+
+
+*****************************************************************
+* FOLLOWING TABLES ARE NECESSARY TO RUN THE PAYROLL APPLICATION *
+* PLEASE COPY THESE CODE AND PASTE IN ORACLE SQL  PROMPT        *
+* TO CREATE ALL THE TABLES IN ORACLE PL/SQL Release 8.1.5.0.0   *
+*                                                               *
+* SELECT TABLE CREATION SYNTEXES BY PRESSING SHIFT + DOWN ARROW *
+* AND THEN BY CTRL+C AND PASTE THESE SYNTEXES ONE BY ONE        *
+* TO YOUR CHALLAN USER SQL PROMPT                               * 
+*****************************************************************
+
+
+
+
+1. ADVANCE MASTER TABLE 
+*****************************************************************
+
+create table advlon (
+ T_NO        NUMBER(3),
+ ADV_AMT     NUMBER(10,2),
+ REC_AMT     NUMBER(10,2),
+ PER_MONTH   NUMBER(10,2),
+ BALANCE     NUMBER(10,2),
+ ADV_DATE    DATE
+);
+
+2. ATTANDANCE MASTER TABLE
+*****************************************************************
+
+create table attd (
+ T_NO         NUMBER(3),
+ MONTH        DATE,
+ DAY_WK       NUMBER(6,3) default 0,
+ DAY_PAY      NUMBER(6,3) default 0,
+ OTHRS        NUMBER(6,2) default 0,
+ SPALL        NUMBER(7,2) default 0,
+ CL           NUMBER(6,3) default 0,
+ PL           NUMBER(6,3) default 0,
+ LWP          NUMBER(6,3) default 0,
+ ARRPAY       NUMBER(7,2) default 0,
+ OTDED        NUMBER(7,2) default 0,
+ ORDED        NUMBER(7,2) default 0,
+ ABDAY        NUMBER(6,3) default 0,
+ LOAN         NUMBER(7,2) default 0,
+ BASIC        NUMBER(8,2) default 0,
+ PBASIC       NUMBER(8,2) default 0,
+ PVDA         NUMBER(8,2) default 0,
+ OTAMT        NUMBER(8,2) default 0,
+ HRA          NUMBER(8,2) default 0,
+ CONV         NUMBER(8,2) default 0,
+ EPF          NUMBER(8,2) default 0,
+ LIC          NUMBER(8,2) default 0,
+ CLBAL        NUMBER(6,3) default 0,
+ PLBAL        NUMBER(6,3) default 0,
+ TOTAL        NUMBER(9,2) default 0,
+ ESI          NUMBER(8,2) default 0,
+ DA           NUMBER(8,2) default 0,
+ ESIC         NUMBER(8,2) default 0,
+ ADVREC       NUMBER(8,2) default 0
+);
+
+
+3. EMPLOYEE MASTER TABLE
+*****************************************************************
+
+CREATE TABLE  empmast (
+ NAME               VARCHAR2(40),
+ FNAME              VARCHAR2(40),
+ ADD1               VARCHAR2(40),
+ ADD2               VARCHAR2(40),
+ ADD3               VARCHAR2(40),
+ DESIGNATION        VARCHAR2(20),
+ DOJ                DATE,
+ BOB                DATE,
+ CATEGORY           VARCHAR2(10),
+ PFNO               VARCHAR2(10),
+ ESINO              VARCHAR2(10),
+ LICNO              VARCHAR2(10),
+ PL                 NUMBER(2),
+ CL                 NUMBER(2),
+ T_NO               NUMBER(3) NOT NULL,
+ BASIC              NUMBER(10,2),
+ DA                 NUMBER(10,2),
+ HRA                NUMBER(10,2),
+ LEFTDATE           DATE,
+ REASON             VARCHAR2(50),
+ PF                 NUMBER(5,2),
+ ESI                NUMBER(5,2),
+ LIC                NUMBER(7,2),
+ SEX                VARCHAR2(7),
+ CONVY              NUMBER(10,2),
+ SPALL              NUMBER(8,2)
+);
+
+4. PARAMETER TABLE
+*****************************************************************
+
+CREATE TABLE para (
+ VDA     NUMBER(8,2),
+ ESI     NUMBER(8,2),
+ EPF     NUMBER(8,2),
+ ESICUTOFF   NUMBER(8,2)
+);
+
+
+5. TEMPORARY ATTANDANCE TABLE
+*****************************************************************
+
+create table TEMPATD (
+ T_NO         NUMBER(3),
+ MONTH        DATE,
+ DAY_WK       NUMBER(6,3) default 0,
+ DAY_PAY      NUMBER(6,3) default 0,
+ OTHRS        NUMBER(6,2) default 0,
+ SPALL        NUMBER(7,2) default 0,
+ CL           NUMBER(6,3) default 0,
+ PL           NUMBER(6,3) default 0,
+ LWP          NUMBER(6,3) default 0,
+ ARRPAY       NUMBER(7,2) default 0,
+ OTDED        NUMBER(7,2) default 0,
+ ORDED        NUMBER(7,2) default 0,
+ ABDAY        NUMBER(6,3) default 0,
+ LOAN         NUMBER(7,2) default 0,
+ BASIC        NUMBER(8,2) default 0,
+ PBASIC       NUMBER(8,2) default 0,
+ PVDA         NUMBER(8,2) default 0,
+ OTAMT        NUMBER(8,2) default 0,
+ HRA          NUMBER(8,2) default 0,
+ CONV         NUMBER(8,2) default 0,
+ EPF          NUMBER(8,2) default 0,
+ LIC          NUMBER(8,2) default 0,
+ CLBAL        NUMBER(6,3) default 0,
+ PLBAL        NUMBER(6,3) default 0,
+ TOTAL        NUMBER(9,2) default 0,
+ ESI          NUMBER(8,2) default 0,
+ DA           NUMBER(8,2) default 0,
+ ESIC         NUMBER(8,2) default 0,
+ ADVREC       NUMBER(8,2) default 0
+);
